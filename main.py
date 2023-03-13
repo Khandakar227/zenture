@@ -4,6 +4,19 @@ from libs import button, show_frame, back_button, activate_button
 
 LARGEFONT =("Arial", 35)  
 BG_COLOR = '#171A21'
+# Which gesture control to use
+mode = 0
+
+def toggle_mode(new_mode, frame:tk.Frame):
+    global mode
+    
+    mode = new_mode if mode != new_mode else 0
+
+    print(mode)
+    if mode == new_mode:
+        frame.toggle_activate.config(text=f"Deactivate", bg='#5dff5d', fg='black')
+    else: frame.toggle_activate.config(text=f"Activate", bg='#EA3A0D', fg='white')
+    
 
 class App(tk.Tk):     
     # __init__ function for class tkinterApp
@@ -59,67 +72,69 @@ class SubPage(tk.Frame):
         back = back_button(self, bg=BG_COLOR, fg='white', command=lambda:controller.show_frame(MainPage))
         back.pack(pady=15, padx=15, fill="both")
 
-class DualHandPage(SubPage):     
+class DualHandPage(SubPage):
     def __init__(self, parent:tk.Frame, controller:App):
         super().__init__(parent, controller)
-
-        toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate())
-        toggle_activate.pack(pady=15, padx=15, fill="both")
+        self.toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate)
+        self.toggle_activate.pack(pady=15, padx=15, fill="both")
     
     def on_toggle_activate(self):
-        # Dual hand gesture code
+        toggle_mode(1, self)        
         
-        pass
+        # Dual hand gesture code
+
 
 class FullBodyPage(SubPage):     
     def __init__(self, parent:tk.Frame, controller:App):
         super().__init__(parent, controller)
 
-        toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate())
-        toggle_activate.pack(pady=15, padx=15, fill="both")
+        self.toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate)
+        self.toggle_activate.pack(pady=15, padx=15, fill="both")
     
     def on_toggle_activate(self):
-        # Dual hand gesture code
+        toggle_mode(2, self)
         
-        pass
+        # Full body gesture code        
 
 
 class AircraftSteeringPage(SubPage):     
     def __init__(self, parent:tk.Frame, controller:App):
         super().__init__(parent, controller)
 
-        toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate())
-        toggle_activate.pack(pady=15, padx=15, fill="both")
+        self.toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate)
+        self.toggle_activate.pack(pady=15, padx=15, fill="both")
     
     def on_toggle_activate(self):
+        toggle_mode(3, self)
         # aircraft hand gesture code
         
-        pass
 
 
 class SingleHandPage(SubPage):     
     def __init__(self, parent:tk.Frame, controller:App):
         super().__init__(parent, controller)
 
-        toggle_activate = activate_button(self, "Activate")
-        toggle_activate.pack(pady=15, padx=15, fill="both")
+        self.toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate)
+        self.toggle_activate.pack(pady=15, padx=15, fill="both")
     
     def on_toggle_activate(self):
+        toggle_mode(4, self)
         # Single hand gesture code
         
-        pass
+        
 
 class RacingPage(SubPage):     
     def __init__(self, parent:tk.Frame, controller:App):
         super().__init__(parent, controller)
 
-        toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate())
-        toggle_activate.pack(pady=15, padx=15, fill="both")
+        self.toggle_activate = activate_button(self, "Activate", command=self.on_toggle_activate)
+        self.toggle_activate.pack(pady=15, padx=15, fill="both")
     
     def on_toggle_activate(self):
+        toggle_mode(5, self)
         # Racing hand gesture code
         
-        pass
-
+        
+        
 app = App()
 app.mainloop()
