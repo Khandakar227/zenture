@@ -203,10 +203,19 @@ class SubPage(tk.Frame):
         self.reset_default_btn.configure(bg="#cdb0ff", fg="#27138b")
         self.reset_default_btn.grid(
             row=2, column=5, pady=15, padx=15, sticky='nsew')
+        
+        self.vr_btn = button(self, text="ADD VR", command=lambda: self.on_vr_btn_clicked())
+        self.vr_btn.configure(bg="#228CDB", fg="#27138b", width=15)
+        self.vr_btn.grid(row=2, column=0, pady=15, padx=15, sticky='nsew')
 
     def on_toggle_activate(self):
         toggle_mode(self.page_mode, self.frame)
 
+    def on_vr_btn_clicked(self):
+        print("VR button clicked")
+        # Run vr console code. pass any parameters if necessary
+        # Use lambda for passing parameters
+        pass
 
 class DualHandPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
@@ -259,7 +268,7 @@ class FullBodyPage(SubPage):
             {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
             {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
         ]
-        
+
         self.keys = []
         for i, key in enumerate(self.key_data):
             btn = button(self, f"{key['label']}\n{key['key']}")
