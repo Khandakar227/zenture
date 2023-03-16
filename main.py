@@ -219,6 +219,24 @@ class DualHandPage(SubPage):
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
+        self.key_data = [
+            {'name': 'up', 'key': 'W', 'label': 'UP'},
+            {'name': 'down', 'key': 'S', 'label': 'DOWN'},
+            {'name': 'left', 'key': 'A', 'label': 'LEFT'},
+            {'name': 'right', 'key': 'S', 'label': 'RIGHT'},
+            {'name': 'gun fire', 'key': 'left', 'label': 'GUN FIRE'},
+            {'name': 'booster', 'key': 'right', 'label': 'BOOSTER'},
+            {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
+            {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
+        ]
+        self.keys = []
+        for i, key in enumerate(self.key_data):
+            btn = button(self, f"{key['label']}\n{key['key']}")
+            btn.grid(row=4+i//4, column=1 + i %
+                     4, pady=15, padx=15, sticky='nsew')
+            btn.config(width=12, font=('Arial', 12))
+            self.keys.append(btn)
+
 
 class FullBodyPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
@@ -230,6 +248,25 @@ class FullBodyPage(SubPage):
             self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
+
+        self.key_data = [
+            {'name': 'up', 'key': 'W', 'label': 'UP'},
+            {'name': 'down', 'key': 'S', 'label': 'DOWN'},
+            {'name': 'left', 'key': 'A', 'label': 'LEFT'},
+            {'name': 'right', 'key': 'S', 'label': 'RIGHT'},
+            {'name': 'gun fire', 'key': 'left', 'label': 'GUN FIRE'},
+            {'name': 'booster', 'key': 'right', 'label': 'BOOSTER'},
+            {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
+            {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
+        ]
+        
+        self.keys = []
+        for i, key in enumerate(self.key_data):
+            btn = button(self, f"{key['label']}\n{key['key']}")
+            btn.grid(row=4+i//4, column=1 + i %
+                     4, pady=15, padx=15, sticky='nsew')
+            btn.config(width=12, font=('Arial', 12))
+            self.keys.append(btn)
 
 
 class AircraftSteeringPage(SubPage):
@@ -305,6 +342,25 @@ class RacingPage(SubPage):
             self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
+
+
+        self.key_data = [
+            {'name': 'up', 'key': 'W', 'label': 'UP'},
+            {'name': 'down', 'key': 'S', 'label': 'DOWN'},
+            {'name': 'left', 'key': 'A', 'label': 'LEFT'},
+            {'name': 'right', 'key': 'S', 'label': 'RIGHT'},
+            {'name': 'gun fire', 'key': 'left', 'label': 'GUN FIRE'},
+            {'name': 'booster', 'key': 'right', 'label': 'BOOSTER'},
+            {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
+            {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
+        ]
+        self.keys = []
+        for i, key in enumerate(self.key_data):
+            btn = button(self, f"{key['label']}\n{key['key']}")
+            btn.grid(row=4+i//4, column=1 + i %
+                     4, pady=15, padx=15, sticky='nsew')
+            btn.config(width=12, font=('Arial', 12))
+            self.keys.append(btn)
 
 
 def on_change_mode(*args):
