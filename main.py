@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 from libs import button, back_button, activate_button
 import vrconsole as vr
 import threading
@@ -60,11 +61,23 @@ class App(tk.Tk):
     def __init__(self, *args, **kwargs):
         # __init__ function for class Tk
         tk.Tk.__init__(self, *args, **kwargs)
+
+        self.logo = tk.PhotoImage(file='assets/XENTURE_logo.png')
+        self.iconphoto(False, self.logo)
+
         self.mode = tk.IntVar()
         self.configure(bg=BG_COLOR)
-        self.geometry(
-            f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
-        self.title('Zenture')
+        self.geometry("1100x800")
+        self.title('Xenture')
+        # App bar at the top
+        appbar = tk.Label(self, text="Xenture", font=('Arial', 16, 'bold'), bg='#4DAA57', padx=70, pady=15, borderwidth=5, anchor='w',)
+        appbar.place( relwidth=1, x=0, y=0)
+        # App logo in app bar
+        app_icon_img = Image.open('assets/XENTURE_icon.png').resize((50, 50))
+        img = ImageTk.PhotoImage(app_icon_img)
+        app_icon = tk.Label(self, image = img, bg='#4DAA57')
+        app_icon.image = img
+        app_icon.place(x = 10, y = 6)
 
         container = tk.Frame(self, bg=BG_COLOR)
         container.pack(anchor="c", fill="none", expand=True)
