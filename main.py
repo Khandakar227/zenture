@@ -1,10 +1,11 @@
+import sys
 import tkinter as tk
 from PIL import Image, ImageTk
 from libs import button, back_button, activate_button
 import vrconsole as vr
 import threading
 import vr_sharing as vshare
-from GAME_MODE import DUAL_HAND_MODE,FLIGHT_CONTROL_MODE,FULLBODY_MODE,RACING_MODE,SINGLE_HAND_MODE
+from GAME_MODE import DUAL_HAND_MODE, FLIGHT_CONTROL_MODE, FULLBODY_MODE, RACING_MODE, SINGLE_HAND_MODE
 
 LARGEFONT = ("Verdana", 20)
 BG_COLOR = '#242424'
@@ -66,27 +67,32 @@ class App(tk.Tk):
         self.iconphoto(False, self.logo)
 
         self.mode = tk.IntVar()
-        self.configure(bg='')
-        self.geometry("1100x800")
+
+        if sys.platform == 'darwin' or sys.platform.startswith('win'):
+            self.geometry("1500x800")
+        else:
+            self.geometry('1100x800')
+
         self.title('Xenture')
-        
+
         # App bavkground
-        bg_img =  Image.open('assets/bg.webp')
+        bg_img = Image.open('assets/bg.webp')
         imgdata = ImageTk.PhotoImage(bg_img)
-        bg =  tk.Label(self, image = imgdata, bg=BG_COLOR)
+        bg = tk.Label(self, image=imgdata, bg=BG_COLOR)
         bg.image = imgdata
         bg.place(x=0, y=0)
-        
+
         # App bar at the top
-        appbar = tk.Label(self, text="Xenture", font=('Arial', 16, 'bold'), bg='#4DAA57', padx=70, pady=15, borderwidth=5, anchor='w',)
-        appbar.place( relwidth=1, x=0, y=0)
-        
+        appbar = tk.Label(self, text="Xenture", font=(
+            'Arial', 16, 'bold'), bg='#4DAA57', padx=70, pady=15, borderwidth=5, anchor='w',)
+        appbar.place(relwidth=1, x=0, y=0)
+
         # App logo in app bar
         app_icon_img = Image.open('assets/XENTURE_icon.png').resize((50, 50))
         img = ImageTk.PhotoImage(app_icon_img)
-        app_icon = tk.Label(self, image = img, bg='#4DAA57')
+        app_icon = tk.Label(self, image=img, bg='#4DAA57')
         app_icon.image = img
-        app_icon.place(x = 10, y = 6)
+        app_icon.place(x=10, y=6)
 
         container = tk.Frame(self)
         container.pack(anchor="c", fill="none", expand=True)
@@ -104,7 +110,7 @@ class App(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (MainPage, DualHandPage, FullBodyPage, AircraftSteeringPage, SingleHandPage, RacingPage):
+        for F in (MainPage, DualHandPage, FullBodyPage, AircraftSteeringPage, SingleHandPage, RacingPage, VRPage):
             frame = F(container, self)
             # frame.configure()
             self.frames[F] = frame
@@ -183,10 +189,11 @@ class App(tk.Tk):
 class MainPage(tk.Frame):
     def __init__(self, parent: tk.Frame, controller: App):
         tk.Frame.__init__(self, parent)
-        width=1100
-        height=800
-        # Create a canvas widget and add it to the frame 
-        self.canvas = tk.Canvas(self, bg='black', highlightthickness=0, width=width, height=height)
+        width = 1100
+        height = 800
+        # Create a canvas widget and add it to the frame
+        self.canvas = tk.Canvas(
+            self, bg='black', highlightthickness=0, width=width, height=height)
         self.canvas.place(x=0, y=0, relheight=1, relwidth=1,)
 
         # Load the background image and create a PhotoImage object from it
@@ -197,11 +204,16 @@ class MainPage(tk.Frame):
         self.canvas.create_image(0, 0, image=self.bg_img, anchor='nw')
 
         # Create the buttons and other widgets
-        dual_hand_btn = button(self.canvas, text='Dual hand gesture', command=lambda: controller.show_frame(DualHandPage))
-        full_body_btn = button(self.canvas, text='Full body gesture', command=lambda: controller.show_frame(FullBodyPage))
-        steering = button(self.canvas, text='Flight control gesture', command=lambda: controller.show_frame(AircraftSteeringPage))
-        single_hand_btn = button(self.canvas, text='Single hand gesture', command=lambda: controller.show_frame(SingleHandPage))
-        racing_btn = button(self.canvas, text='Racing', command=lambda: controller.show_frame(RacingPage))
+        dual_hand_btn = button(self.canvas, text='Dual hand gesture',
+                               command=lambda: controller.show_frame(DualHandPage))
+        full_body_btn = button(self.canvas, text='Full body gesture',
+                               command=lambda: controller.show_frame(FullBodyPage))
+        steering = button(self.canvas, text='Flight control gesture',
+                          command=lambda: controller.show_frame(AircraftSteeringPage))
+        single_hand_btn = button(self.canvas, text='Single hand gesture',
+                                 command=lambda: controller.show_frame(SingleHandPage))
+        racing_btn = button(self.canvas, text='Racing',
+                            command=lambda: controller.show_frame(RacingPage))
 
         # Place the buttons on the canvas
         dual_hand_btn.place(x=width/2 - 100, y=height/2-400)
@@ -213,8 +225,8 @@ class MainPage(tk.Frame):
 
 class SubPage(tk.Frame):
     def __init__(self, parent: tk.Frame, controller: App):
-        width=1100
-        height=800
+        width = 1100
+        height = 800
 
         self.page_mode = 0
         self.frame: tk.Frame
@@ -222,8 +234,9 @@ class SubPage(tk.Frame):
         self.titleLabel: tk.Label
 
         tk.Frame.__init__(self, parent)
-        # Create a canvas widget and add it to the frame 
-        self.canvas = tk.Canvas(self, bg='black', highlightthickness=0, width=width, height=height)
+        # Create a canvas widget and add it to the frame
+        self.canvas = tk.Canvas(
+            self, bg='black', highlightthickness=0, width=width, height=height)
         self.canvas.place(x=0, y=0, relheight=1, relwidth=1,)
 
         # Load the background image and create a PhotoImage object from it
@@ -232,7 +245,7 @@ class SubPage(tk.Frame):
 
         # Place the background image on the canvas
         self.canvas.create_image(0, 0, image=self.bg_img, anchor='nw')
-        
+
         back = back_button(self, fg='white', bg=BG_COLOR,
                            command=lambda: controller.show_frame(MainPage))
         back.grid(row=0, column=0, pady=15, padx=15)
@@ -246,19 +259,24 @@ class SubPage(tk.Frame):
         self.reset_default_btn.configure(bg="#cdb0ff", fg="#27138b")
         self.reset_default_btn.grid(
             row=2, column=5, pady=15, padx=15, sticky='nsew')
-        
-        self.vr_btn = button(self, text="ADD VR", command=lambda: self.on_vr_btn_clicked())
+
+        self.vr_btn = button(
+            self, text="ADD VR", command=lambda: self.on_vr_btn_clicked(controller))
         self.vr_btn.configure(bg="#228CDB", fg="#27138b", width=15)
         self.vr_btn.grid(row=2, column=0, pady=15, padx=15, sticky='nsew')
 
     def on_toggle_activate(self):
         toggle_mode(self.page_mode, self.frame)
 
-    def on_vr_btn_clicked(self):
+    def on_vr_btn_clicked(self, controller: App):
         print("VR button clicked")
+        # print(VRPage.height)
+        VRPage.back_link = self.frame
+        controller.show_frame(VRPage)
         # Run vr console code. pass any parameters if necessary
         # Use lambda for passing parameters
         pass
+
 
 class DualHandPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
@@ -395,7 +413,6 @@ class RacingPage(SubPage):
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
-
         self.key_data = [
             {'name': 'up', 'key': 'W', 'label': 'UP'},
             {'name': 'down', 'key': 'S', 'label': 'DOWN'},
@@ -413,6 +430,40 @@ class RacingPage(SubPage):
                      4, pady=15, padx=15, sticky='nsew')
             btn.config(width=12, font=('Arial', 12))
             self.keys.append(btn)
+
+
+class VRPage(tk.Frame):
+    width = 1100
+    height = 800
+    back_link: tk.Frame
+
+    def __init__(self, parent: tk.Frame, controller: App):
+        tk.Frame.__init__(self, parent)
+        self.back_link: SubPage
+        # Create a canvas widget and add it to the frame
+        self.canvas = tk.Canvas(
+            self, bg='black', highlightthickness=0, width=self.width, height=self.height)
+        self.canvas.place(x=0, y=0, relheight=1, relwidth=1,)
+
+        # Load the background image and create a PhotoImage object from it
+        img = Image.open('assets/bg.webp')
+        self.bg_img = ImageTk.PhotoImage(img)
+
+        # Place the background image on the canvas
+        self.canvas.create_image(0, 0, image=self.bg_img, anchor='nw')
+
+        self.url = 'http://192.168.0.100:5000/video_feed'
+
+        label = tk.Label(self, text="VR is enabled. Go to your mobile and paste this url",
+                         font=LARGEFONT, bg=BG_COLOR, fg='white')
+        label.place(x=self.width/2, y=self.height/2-100, anchor='c',)
+        url_label = tk.Label(self, text=self.url,
+                             font=LARGEFONT, bg=BG_COLOR, fg='white')
+        url_label.place(x=self.width/2, y=self.height/2, anchor='c')
+
+        go_back: tk.Button = back_button(
+            self, bg= BG_COLOR, fg='white', command=lambda: controller.show_frame(MainPage))
+        go_back.place(x=self.width/2, y=100, anchor='c')
 
 
 def on_change_mode(*args):
