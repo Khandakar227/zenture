@@ -7,7 +7,7 @@ import vr_sharing as vshare
 from GAME_MODE import DUAL_HAND_MODE,FLIGHT_CONTROL_MODE,FULLBODY_MODE,RACING_MODE,SINGLE_HAND_MODE
 
 LARGEFONT = ("Verdana", 20)
-BG_COLOR = '#171A21'
+BG_COLOR = '#242424'
 game_mode = 0
 game_ctrl_state = 0
 
@@ -66,12 +66,21 @@ class App(tk.Tk):
         self.iconphoto(False, self.logo)
 
         self.mode = tk.IntVar()
-        self.configure(bg=BG_COLOR)
+        self.configure(bg='')
         self.geometry("1100x800")
         self.title('Xenture')
+        
+        # App bavkground
+        bg_img =  Image.open('assets/bg.webp')
+        imgdata = ImageTk.PhotoImage(bg_img)
+        bg =  tk.Label(self, image = imgdata, bg=BG_COLOR)
+        bg.image = imgdata
+        bg.place(x=0, y=0)
+        
         # App bar at the top
         appbar = tk.Label(self, text="Xenture", font=('Arial', 16, 'bold'), bg='#4DAA57', padx=70, pady=15, borderwidth=5, anchor='w',)
         appbar.place( relwidth=1, x=0, y=0)
+        
         # App logo in app bar
         app_icon_img = Image.open('assets/XENTURE_icon.png').resize((50, 50))
         img = ImageTk.PhotoImage(app_icon_img)
@@ -79,7 +88,7 @@ class App(tk.Tk):
         app_icon.image = img
         app_icon.place(x = 10, y = 6)
 
-        container = tk.Frame(self, bg=BG_COLOR)
+        container = tk.Frame(self)
         container.pack(anchor="c", fill="none", expand=True)
 
         container.grid_rowconfigure(0, weight=1)
@@ -97,6 +106,7 @@ class App(tk.Tk):
         # of the different page layouts
         for F in (MainPage, DualHandPage, FullBodyPage, AircraftSteeringPage, SingleHandPage, RacingPage):
             frame = F(container, self)
+            # frame.configure()
             self.frames[F] = frame
             frame.grid(sticky="nsew", row=0, column=0)
 
@@ -172,37 +182,58 @@ class App(tk.Tk):
 
 class MainPage(tk.Frame):
     def __init__(self, parent: tk.Frame, controller: App):
-        tk.Frame.__init__(self, parent, bg=BG_COLOR, pady=50)
+        tk.Frame.__init__(self, parent)
+        width=1100
+        height=800
+        # Create a canvas widget and add it to the frame 
+        self.canvas = tk.Canvas(self, bg='black', highlightthickness=0, width=width, height=height)
+        self.canvas.place(x=0, y=0, relheight=1, relwidth=1,)
 
-        dual_hand_btn = button(self, text='Dual hand gesture',
-                               command=lambda: controller.show_frame(DualHandPage))
-        full_body_btn = button(self, text='Full body gesture',
-                               command=lambda: controller.show_frame(FullBodyPage))
-        steering = button(self, text='Flight control gesture',
-                          command=lambda: controller.show_frame(AircraftSteeringPage))
-        single_hand_btn = button(self, text='Single hand gesture',
-                                 command=lambda: controller.show_frame(SingleHandPage))
-        racing_btn = button(self, text='Racing',
-                            command=lambda: controller.show_frame(RacingPage))
+        # Load the background image and create a PhotoImage object from it
+        img = Image.open('assets/bg.webp')
+        self.bg_img = ImageTk.PhotoImage(img)
 
-        tk.Label(self, text="", width=50, bg=BG_COLOR).grid(column=0)
-        dual_hand_btn.grid(column=3, row=1, pady=15, padx=15)
-        full_body_btn.grid(column=3, row=2, pady=15, padx=15)
-        steering.grid(column=3, row=3, pady=15, padx=15)
-        single_hand_btn.grid(column=3, row=4, pady=15, padx=15)
-        racing_btn.grid(column=3, row=5, pady=15, padx=15)
+        # Place the background image on the canvas
+        self.canvas.create_image(0, 0, image=self.bg_img, anchor='nw')
+
+        # Create the buttons and other widgets
+        dual_hand_btn = button(self.canvas, text='Dual hand gesture', command=lambda: controller.show_frame(DualHandPage))
+        full_body_btn = button(self.canvas, text='Full body gesture', command=lambda: controller.show_frame(FullBodyPage))
+        steering = button(self.canvas, text='Flight control gesture', command=lambda: controller.show_frame(AircraftSteeringPage))
+        single_hand_btn = button(self.canvas, text='Single hand gesture', command=lambda: controller.show_frame(SingleHandPage))
+        racing_btn = button(self.canvas, text='Racing', command=lambda: controller.show_frame(RacingPage))
+
+        # Place the buttons on the canvas
+        dual_hand_btn.place(x=width/2 - 100, y=height/2-400)
+        full_body_btn.place(x=width/2 - 100, y=height/2-300)
+        steering.place(x=width/2 - 100, y=height/2-200)
+        single_hand_btn.place(x=width/2 - 100, y=height/2-100)
+        racing_btn.place(x=width/2 - 100, y=height/2)
 
 
 class SubPage(tk.Frame):
     def __init__(self, parent: tk.Frame, controller: App):
+        width=1100
+        height=800
 
         self.page_mode = 0
         self.frame: tk.Frame
         # = tk.Label(self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
         self.titleLabel: tk.Label
 
-        tk.Frame.__init__(self, parent, bg=BG_COLOR)
-        back = back_button(self, bg=BG_COLOR, fg='white',
+        tk.Frame.__init__(self, parent)
+        # Create a canvas widget and add it to the frame 
+        self.canvas = tk.Canvas(self, bg='black', highlightthickness=0, width=width, height=height)
+        self.canvas.place(x=0, y=0, relheight=1, relwidth=1,)
+
+        # Load the background image and create a PhotoImage object from it
+        img = Image.open('assets/bg.webp')
+        self.bg_img = ImageTk.PhotoImage(img)
+
+        # Place the background image on the canvas
+        self.canvas.create_image(0, 0, image=self.bg_img, anchor='nw')
+        
+        back = back_button(self, fg='white', bg=BG_COLOR,
                            command=lambda: controller.show_frame(MainPage))
         back.grid(row=0, column=0, pady=15, padx=15)
 
@@ -211,8 +242,7 @@ class SubPage(tk.Frame):
         self.toggle_activate.grid(
             row=0, column=5, pady=15, padx=15, sticky='nsew')
 
-        self.reset_default_btn = activate_button(
-            self, "Reset to default", command=self.on_toggle_activate)
+        self.reset_default_btn = activate_button(self, "Reset to default")
         self.reset_default_btn.configure(bg="#cdb0ff", fg="#27138b")
         self.reset_default_btn.grid(
             row=2, column=5, pady=15, padx=15, sticky='nsew')
@@ -237,7 +267,7 @@ class DualHandPage(SubPage):
         self.title = "Dual hand gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
-            self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
@@ -267,7 +297,7 @@ class FullBodyPage(SubPage):
         self.title = "Full body gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
-            self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
@@ -298,11 +328,11 @@ class AircraftSteeringPage(SubPage):
         self.title = "Flight control gesture"
         self.frame = self
         self.titleLabel = tk.Label(
-            self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
-        tk.Label(self, text="Configure keys", bg=BG_COLOR, fg='white', font=(
+        tk.Label(self, text="Configure keys", fg='white', font=(
             'Verdana', 16, 'bold')).grid(row=3, column=2, pady=15, padx=15, sticky='nsew')
 
         self.key_data = [
@@ -331,7 +361,7 @@ class SingleHandPage(SubPage):
         self.title = "Single hand gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
-            self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
@@ -361,7 +391,7 @@ class RacingPage(SubPage):
         self.title = "Racing gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
-            self, text=self.title, bg=BG_COLOR, fg='white', font=LARGEFONT)
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
         self.titleLabel.grid(row=1, column=2, columnspan=2,
                              padx=15, pady=15, sticky='nsew')
 
