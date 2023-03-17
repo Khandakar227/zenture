@@ -5,7 +5,7 @@ from libs import button, back_button, activate_button
 import vrconsole as vr
 import threading
 import vr_sharing as vshare
-from GAME_MODE import DUAL_HAND_MODE, FLIGHT_CONTROL_MODE, FULLBODY_MODE, RACING_MODE, SINGLE_HAND_MODE
+from GAME_MODE import DUAL_HAND_MODE, FLIGHT_CONTROL_MODE, FRUITNINJA_MODE, FULLBODY_MODE, JUMP_MODE, RACING_MODE, SINGLE_HAND_MODE
 
 LARGEFONT = ("Verdana", 20)
 BG_COLOR = '#242424'
@@ -110,7 +110,7 @@ class App(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (MainPage, DualHandPage, FullBodyPage, AircraftSteeringPage, SingleHandPage, RacingPage, VRPage):
+        for F in (MainPage, DualHandPage, FullBodyPage, AircraftSteeringPage, SingleHandPage, RacingPage, FruitNinjaPage, JumpPage, VRPage):
             frame = F(container, self)
             # frame.configure()
             self.frames[F] = frame
@@ -179,6 +179,24 @@ class App(tk.Tk):
             # Racing gesture code
             vr_active_thread.start()
             pass
+        elif self.mode.get() == FRUITNINJA_MODE:
+            self.statusbar.configure(
+                text='Fruit ninja gesture is active', fg='lightgreen')
+            print(self.mode.get())
+            game_mode = self.mode.get()
+            # console_active_thread.start()
+            # Fruit ninja gesture code
+            vr_active_thread.start()
+            pass
+        elif self.mode.get() == JUMP_MODE:
+            self.statusbar.configure(
+                text='Jump gesture is active', fg='lightgreen')
+            print(self.mode.get())
+            game_mode = self.mode.get()
+            # console_active_thread.start()
+            # Jump gesture code
+            vr_active_thread.start()
+            pass
         else:
             self.statusbar.configure(text='No mode is active', fg='red')
             print(self.mode.get())
@@ -214,13 +232,19 @@ class MainPage(tk.Frame):
                                  command=lambda: controller.show_frame(SingleHandPage))
         racing_btn = button(self.canvas, text='Racing',
                             command=lambda: controller.show_frame(RacingPage))
+        jump_btn = button(self.canvas, text='Jump gesture',
+                            command=lambda: controller.show_frame(JumpPage))
+        fruit_ninja_btn = button(self.canvas, text='Fruit Ninja',
+                            command=lambda: controller.show_frame(FruitNinjaPage))
 
         # Place the buttons on the canvas
-        dual_hand_btn.place(x=width/2 - 100, y=height/2-400)
-        full_body_btn.place(x=width/2 - 100, y=height/2-300)
+        dual_hand_btn.place(x=width/2 - 100, y=height/2-300)
+        full_body_btn.place(x=width/2 - 100, y=height/2-250)
         steering.place(x=width/2 - 100, y=height/2-200)
-        single_hand_btn.place(x=width/2 - 100, y=height/2-100)
-        racing_btn.place(x=width/2 - 100, y=height/2)
+        single_hand_btn.place(x=width/2 - 100, y=height/2-150)
+        racing_btn.place(x=width/2 - 100, y=height/2-100)
+        jump_btn.place(x=width/2 - 100, y=height/2-50)
+        fruit_ninja_btn.place(x=width/2 - 100, y=height/2)
 
 
 class SubPage(tk.Frame):
@@ -430,6 +454,67 @@ class RacingPage(SubPage):
                      4, pady=15, padx=15, sticky='nsew')
             btn.config(width=12, font=('Arial', 12))
             self.keys.append(btn)
+
+
+class JumpPage(SubPage):
+    def __init__(self, parent: tk.Frame, controller: App):
+        super().__init__(parent, controller)
+        self.page_mode = 5
+        self.title = "Jump gesture control"
+        self.frame = self
+        self.titleLabel = tk.Label(
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
+        self.titleLabel.grid(row=1, column=2, columnspan=2,
+                             padx=15, pady=15, sticky='nsew')
+
+        self.key_data = [
+            {'name': 'up', 'key': 'W', 'label': 'UP'},
+            {'name': 'down', 'key': 'S', 'label': 'DOWN'},
+            {'name': 'left', 'key': 'A', 'label': 'LEFT'},
+            {'name': 'right', 'key': 'S', 'label': 'RIGHT'},
+            {'name': 'gun fire', 'key': 'left', 'label': 'GUN FIRE'},
+            {'name': 'booster', 'key': 'right', 'label': 'BOOSTER'},
+            {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
+            {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
+        ]
+        self.keys = []
+        for i, key in enumerate(self.key_data):
+            btn = button(self, f"{key['label']}\n{key['key']}")
+            btn.grid(row=4+i//4, column=1 + i %
+                     4, pady=15, padx=15, sticky='nsew')
+            btn.config(width=12, font=('Arial', 12))
+            self.keys.append(btn)
+
+
+class FruitNinjaPage(SubPage):
+    def __init__(self, parent: tk.Frame, controller: App):
+        super().__init__(parent, controller)
+        self.page_mode = 5
+        self.title = "Fruit ninja control"
+        self.frame = self
+        self.titleLabel = tk.Label(
+            self, text=self.title, fg='white', bg=BG_COLOR, font=LARGEFONT)
+        self.titleLabel.grid(row=1, column=2, columnspan=2,
+                             padx=15, pady=15, sticky='nsew')
+
+        self.key_data = [
+            {'name': 'up', 'key': 'W', 'label': 'UP'},
+            {'name': 'down', 'key': 'S', 'label': 'DOWN'},
+            {'name': 'left', 'key': 'A', 'label': 'LEFT'},
+            {'name': 'right', 'key': 'S', 'label': 'RIGHT'},
+            {'name': 'gun fire', 'key': 'left', 'label': 'GUN FIRE'},
+            {'name': 'booster', 'key': 'right', 'label': 'BOOSTER'},
+            {'name': 'missiles', 'key': 'up', 'label': 'FIRE MISSILES'},
+            {'name': 'flares', 'key': 'down', 'label': 'DEPLOY FLARES'},
+        ]
+        self.keys = []
+        for i, key in enumerate(self.key_data):
+            btn = button(self, f"{key['label']}\n{key['key']}")
+            btn.grid(row=4+i//4, column=1 + i %
+                     4, pady=15, padx=15, sticky='nsew')
+            btn.config(width=12, font=('Arial', 12))
+            self.keys.append(btn)
+
 
 
 class VRPage(tk.Frame):
