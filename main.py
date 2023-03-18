@@ -305,7 +305,7 @@ class SubPage(tk.Frame):
 class DualHandPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 1
+        self.page_mode = DUAL_HAND_MODE
         self.title = "Dual hand gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -335,7 +335,7 @@ class DualHandPage(SubPage):
 class FullBodyPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 2
+        self.page_mode = FULLBODY_MODE
         self.title = "Full body gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -366,7 +366,7 @@ class FullBodyPage(SubPage):
 class AircraftSteeringPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 3
+        self.page_mode = FLIGHT_CONTROL_MODE
         self.title = "Flight control gesture"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -399,7 +399,7 @@ class AircraftSteeringPage(SubPage):
 class SingleHandPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 4
+        self.page_mode = SINGLE_HAND_MODE
         self.title = "Single hand gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -429,7 +429,7 @@ class SingleHandPage(SubPage):
 class RacingPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 5
+        self.page_mode = RACING_MODE
         self.title = "Racing gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -459,7 +459,7 @@ class RacingPage(SubPage):
 class JumpPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 5
+        self.page_mode = JUMP_MODE
         self.title = "Jump gesture control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -489,7 +489,7 @@ class JumpPage(SubPage):
 class FruitNinjaPage(SubPage):
     def __init__(self, parent: tk.Frame, controller: App):
         super().__init__(parent, controller)
-        self.page_mode = 5
+        self.page_mode = FRUITNINJA_MODE
         self.title = "Fruit ninja control"
         self.frame = self
         self.titleLabel = tk.Label(
@@ -569,6 +569,12 @@ def on_change_mode(*args):
         # Single Hand code
         pass
     elif mode.get() == 5:
+        # Racing gesture code
+        pass
+    elif mode.get() == 6:
+        # Racing gesture code
+        pass
+    elif mode.get() == 7:
         # Racing gesture code
         pass
     else:
